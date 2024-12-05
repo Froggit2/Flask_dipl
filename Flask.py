@@ -9,10 +9,12 @@ def glavn():
 
 @app.route('/products', methods=['GET', 'POST'])
 def products():
-    products = Products.query.all()
+    session = Session()
+    products = session.query(Products).all()
     if request.method == 'POST':
         message = 'Вы успешно приобрели продукт!'
         return render_template('products.html', message=message)
+    session.close()
     return render_template('products.html', products=products)
 
 @app.route('/add_product', methods=['GET', 'POST'])
@@ -25,7 +27,7 @@ def add_products():
         session.add(new_product)
         session.commit()
     session.close()
-    return render_template('products.html')
+    return render_template('add_product.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
